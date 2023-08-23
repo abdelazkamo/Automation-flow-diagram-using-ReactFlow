@@ -1,0 +1,47 @@
+.container {
+  position: relative;
+}
+
+.text-updater-node {
+  width: 150px;
+  border: 1px solid #e7e7e7;
+  padding: 5px 0;
+  border-radius: 10px;
+  background: white;
+}
+.text-updater-node:hover {
+  border: 1px solid #157cfc;
+}
+
+.text-updater-node label {
+  display: block;
+  color: #777;
+  font-size: 12px;
+}
+
+.custom_header {
+  display: flex;
+  font-size: 12px;
+  border-bottom: 1px solid #e7e7e7;
+  margin-bottom: 5px;
+}
+.sub_header {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 0 5px 5px 5px;
+}
+.footer {
+  border-top: 1px solid #e7e7e7;
+  height: 10px;
+}
+
+.deleteIcon {
+  position: absolute;
+  top: -15px;
+  right: 50%;
+  cursor: pointer;
+}
