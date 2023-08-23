@@ -1,46 +1,62 @@
-# Getting Started with Create React App
+# ReactFlow Automation Flow with Custom Node and Edge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an example project that demonstrates how to create an Automation flow diagram using ReactFlow library with custom nodes and edges.
 
-## Available Scripts
+### Installation
 
-In the project directory, you can run:
+## 1- Clone the repository:
+
+git clone https://github.com/your-username/reactflow-custom-nodes.git
+Navigate to the project directory:
+
+cd reactflow-custom-nodes
+
+## 2- Install the dependencies using npm or yarn:
+
+### `npm install`
+
+or
+
+### `yarn install`
+
+## 3- Usage
+
+To run the application, execute the following command in the project directory:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This will start the development server and open the application in your default web browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Custom Components
+This project showcases the usage of custom nodes and edges. The following custom components are defined and used:
 
-### `npm test`
+Custom, Custom2, Custom3, and Custom4: These are custom node components that define the appearance and behavior of different types of nodes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ButtonEdge: This is a custom edge component that represents a button-style edge connection between nodes.
 
-### `npm run build`
+Features
+Custom Nodes: The project utilizes custom node components to create nodes with distinct styles and behaviors.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Custom Edges: Custom edges are implemented to establish connections between nodes with unique visual characteristics.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Marker Types: The example demonstrates the use of different marker types, like ArrowClosed, to visualize edge endings.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Node and Edge Management: The application provides functionality to add, move, and delete nodes and edges.
 
-### `npm run eject`
+Zoom and Pan: Users can zoom in and out of the canvas and pan to view different areas of the diagram.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The main component of the application is the Flow component, defined in the Flow.js file. It uses the ReactFlow library to render the flow diagram with custom nodes and edges.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+nodeTypes: A dictionary of custom node components used in the flow diagram.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+edgeTypes: A dictionary of custom edge components used in the flow diagram.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+initialNodes: An array containing the initial set of nodes for the flow diagram.
 
-## Learn More
+initialEdges: An array containing the initial set of edges for the flow diagram.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The Flow component handles node and edge changes using the useState hook. It also provides functions like onNodesChange and onEdgesChange to update the state when changes occur.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Feel free to explore, modify, and use this example project as a foundation for your own ReactFlow-based applications with custom nodes and edges. If you have any questions or suggestions, please open an issue in the repository or feel free to email me at:
+
+### azizoukamo@gmail.com
