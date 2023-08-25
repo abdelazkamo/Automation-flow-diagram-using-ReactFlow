@@ -1,11 +1,15 @@
 // App.js
 import React from "react";
-import Custom from "./components/Node";
+import Automation from "./pages/Automation";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const App = () => {
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <Custom />
+    <div>
+      <Provider store={store}>
+        <Automation />
+      </Provider>
     </div>
   );
 };

@@ -41,13 +41,18 @@ export default function CustomEdge({
     [reactFlow]
   );
   const [isHover, setIsHover] = useState(false);
+  const edgeColor = isHover ? "#157cfc" : "";
 
   return (
     <g
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={{ ...style, stroke: edgeColor }}
+      />
       <EdgeLabelRenderer>
         <div
           style={{

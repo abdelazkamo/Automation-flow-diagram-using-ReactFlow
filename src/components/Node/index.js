@@ -1,21 +1,68 @@
-import { useCallback, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
+import ELK from "elkjs/lib/elk.bundled.js";
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
-  MiniMap,
   Controls,
   MarkerType,
+  ReactFlowProvider,
+  Panel,
+  useNodesState,
+  useEdgesState,
+  useReactFlow,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import "./custom.css";
+import "./nodes/custom.css";
 
-import Custom from "./custom.js";
-import Custom2 from "./custom2.js";
-import Custom3 from "./custom3.js";
-import Custom4 from "./custom4.js";
+import Custom from "./nodes/custom.js";
+import Custom2 from "./nodes/custom2.js";
+import Custom3 from "./nodes/custom3.js";
+import Custom4 from "./nodes/custom4.js";
 
-import ButtonEdge from "./customEdge";
+import ButtonEdge from "./edges/customEdge";
+
+const elk = new ELK();
+
+const elkOptions = {
+  "elk.algorithm": "layered",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+  "elk.spacing.nodeNode": "80",
+};
+
+const getLayoutedElements = (nodes, edges, options = {}) => {
+  const isHorizontal = options?.["elk.direction"] === "RIGHT";
+  const graph = {
+    id: "root",
+    layoutOptions: options,
+    children: nodes.map((node) => ({
+      ...node,
+      // Adjust the target and source handle positions based on the layout
+      // direction.
+      targetPosition: isHorizontal ? "left" : "top",
+      sourcePosition: isHorizontal ? "right" : "bottom",
+
+      // Hardcode a width and height for elk to use when layouting.
+      width: 150,
+      height: 50,
+    })),
+    edges: edges,
+  };
+
+  return elk
+    .layout(graph)
+    .then((layoutedGraph) => ({
+      nodes: layoutedGraph.children.map((node) => ({
+        ...node,
+        // React Flow expects a position property on the node instead of `x`
+        // and `y` fields.
+        position: { x: node.x, y: node.y },
+      })),
+
+      edges: layoutedGraph.edges,
+    }))
+    .catch(console.error);
+};
 
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
@@ -86,6 +133,7 @@ const initialEdges = [
 function Flow() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
+  const [clickedNode, setClickedNode] = useState(null);
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -95,6 +143,15 @@ function Flow() {
     (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
     [setEdges]
   );
+  const onNodeClick = useCallback(
+    (node) => {
+      setClickedNode(node);
+    },
+    [setClickedNode]
+  );
+
+  console.log("Node clicked:", clickedNode);
+
   const onConnect = useCallback(
     (connection) =>
       setEdges((eds) =>
@@ -111,7 +168,34 @@ function Flow() {
       ),
     [setEdges]
   );
+  // Hide reactflow attribution
   const proOptions = { hideAttribution: true };
+
+  const { fitView } = useReactFlow();
+
+  const onLayout = useCallback(
+    ({ direction, useInitialNodes = false }) => {
+      const opts = { "elk.direction": direction, ...elkOptions };
+      const ns = useInitialNodes ? initialNodes : nodes;
+      const es = useInitialNodes ? initialEdges : edges;
+
+      getLayoutedElements(ns, es, opts).then(
+        ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+          setNodes(layoutedNodes);
+          setEdges(layoutedEdges);
+
+          window.requestAnimationFrame(() => fitView());
+        }
+      );
+    },
+    [nodes, edges]
+  );
+
+  // Calculate the initial layout on mount.
+  useLayoutEffect(() => {
+    onLayout({ direction: "RIGHT", useInitialNodes: true });
+  }, []);
+
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <ReactFlow
@@ -119,6 +203,7 @@ function Flow() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={onNodeClick}
         onConnect={onConnect}
         proOptions={proOptions}
         nodeTypes={nodeTypes}
@@ -127,10 +212,23 @@ function Flow() {
         style={rfStyle}
       >
         <Controls />
-        {/* <MiniMap /> */}
+        <Panel position="top-right">
+          <button onClick={() => onLayout({ direction: "DOWN" })}>
+            vertical layout
+          </button>
+
+          <button onClick={() => onLayout({ direction: "RIGHT" })}>
+            horizontal layout
+          </button>
+        </Panel>
       </ReactFlow>
     </div>
   );
 }
 
-export default Flow;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default () => (
+  <ReactFlowProvider>
+    <Flow />
+  </ReactFlowProvider>
+);

@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 import { Handle, Position, useReactFlow } from "reactflow";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import DeleteIcon from "@material-ui/icons/Delete";
-import IMG from "./2.png";
-import VIDEO from "./video.mp4";
+import IMG from "../img/2.png";
+import VIDEO from "../img/video.mp4";
 
 const handleStyle = {
   background: "#B7D0F0",

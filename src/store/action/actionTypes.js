@@ -1,0 +1,1 @@
+export const SAVE_ENTIRE_STATE = "SAVE_ENTIRE_STATE";
