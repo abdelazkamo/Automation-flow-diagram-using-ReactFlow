@@ -1,6 +1,10 @@
 # ReactFlow Automation Flow with Custom Node and Edge
 
-This is an example project that demonstrates how to create an Automation flow diagram using ReactFlow library with custom nodes and edges.
+This is an example project that demonstrates how to create an Automation flow diagram using ReactFlow library with custom nodes and edges, redux was used for managing the states of our nodes.
+
+Feel free to explore, modify, and use this example project as a foundation for your own ReactFlow-based applications with custom nodes and edges. If you have any questions or suggestions, please open an issue in the repository or feel free to email me at:
+
+### azizoukamo@gmail.com
 
 ### Installation
 
@@ -56,7 +60,3 @@ initialNodes: An array containing the initial set of nodes for the flow diagram.
 initialEdges: An array containing the initial set of edges for the flow diagram.
 
 The Flow component handles node and edge changes using the useState hook. It also provides functions like onNodesChange and onEdgesChange to update the state when changes occur.
-
-Feel free to explore, modify, and use this example project as a foundation for your own ReactFlow-based applications with custom nodes and edges. If you have any questions or suggestions, please open an issue in the repository or feel free to email me at:
-
-### azizoukamo@gmail.com

@@ -86,7 +86,7 @@ function CustomNode({ id, isConnectable }) {
               }}
             />
           </div>
-          <div style={{ marginTop: "5px" }}>Send Message</div>
+          <div style={{ marginTop: "5px" }}>Trigger</div>
         </div>
         {data?.message && (
           <div className="sub_header">
@@ -96,7 +96,7 @@ function CustomNode({ id, isConnectable }) {
                 paddingBottom: "5px",
               }}
             >
-              Send Message
+              Trigger
             </div>
             <div style={{ fontSize: "9px", paddingTop: "5px", minHeight: 15 }}>
               {data.message}

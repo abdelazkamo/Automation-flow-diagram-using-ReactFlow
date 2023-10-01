@@ -54,7 +54,7 @@ function CustomNode3({ id, isConnectable }) {
       </div>
       <div className="sub_header">
         <div style={{ paddingBottom: "5px", fontSize: "9px" }}>
-          First name is Cemal
+          First name is Abdel Aziz
         </div>
       </div>
       <div className="sub_header">
@@ -66,15 +66,11 @@ function CustomNode3({ id, isConnectable }) {
             gap: "5px",
           }}
         >
-          <div>First name Equal Cemal</div>
-          <div>Last name Not equal Güneş</div>
-          <div>Full name Contains Cemal Güneş</div>
-          <div>Phone Not contains +90 5415145512</div>
+          <div>First name Equal Abdel Aziz</div>
+          <div>Last name Not equal Kamo</div>
           <div>Email Has any value</div>
           <div>Tag Unknown</div>
           <div>Working hours Equal In working hours</div>
-          <div>Channel Equal WhatsApp</div>
-          <div>Message content Contains Help, yardim, support</div>
         </div>
       </div>
       <div

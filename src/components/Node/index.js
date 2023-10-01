@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import ELK from "elkjs/lib/elk.bundled.js";
 import ReactFlow, {
   addEdge,
@@ -14,6 +14,7 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import "./nodes/custom.css";
+import Modal from "react-modal";
 
 import Custom from "./nodes/custom.js";
 import Custom2 from "./nodes/custom2.js";
@@ -21,6 +22,8 @@ import Custom3 from "./nodes/custom3.js";
 import Custom4 from "./nodes/custom4.js";
 
 import ButtonEdge from "./edges/customEdge";
+
+Modal.setAppElement("#root"); // Set the app element for accessibility
 
 const elk = new ELK();
 
@@ -37,13 +40,9 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     layoutOptions: options,
     children: nodes.map((node) => ({
       ...node,
-      // Adjust the target and source handle positions based on the layout
-      // direction.
       targetPosition: isHorizontal ? "left" : "top",
       sourcePosition: isHorizontal ? "right" : "bottom",
-
-      // Hardcode a width and height for elk to use when layouting.
-      width: 150,
+      width: 100,
       height: 50,
     })),
     edges: edges,
@@ -54,20 +53,13 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     .then((layoutedGraph) => ({
       nodes: layoutedGraph.children.map((node) => ({
         ...node,
-        // React Flow expects a position property on the node instead of `x`
-        // and `y` fields.
         position: { x: node.x, y: node.y },
       })),
-
       edges: layoutedGraph.edges,
     }))
     .catch(console.error);
 };
 
-// we define the nodeTypes outside of the component to prevent re-renderings
-// you could also use useMemo inside the component
-
-// our custom nodes
 const nodeTypes = {
   customNode1: Custom,
   customNode2: Custom2,
@@ -75,10 +67,10 @@ const nodeTypes = {
   customNode4: Custom4,
 };
 
-// our custom edges
 const edgeTypes = {
   buttonedge: ButtonEdge,
 };
+
 const rfStyle = {
   backgroundColor: "#F7F7FA",
 };
@@ -133,42 +125,93 @@ const initialEdges = [
 function Flow() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [clickedNode, setClickedNode] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [sourceNodeId, setSourceNodeId] = useState(null);
+  const [targetNodeId, setTargetNodeId] = useState(null);
+
+  const handleEdgeStart = (event, sourceNode) => {
+    setSourceNodeId(sourceNode.id);
+  };
+
+  const handleEdgeEnd = (event, targetNode) => {
+    // setTargetNodeId(targetNode.id);
+    setShowModal(true);
+  };
+
+  const handleNodeTypeSelect = (selectedNodeType) => {
+    setShowModal(false);
+
+    const newTargetNode = {
+      id: Date.now().toString(),
+      type: selectedNodeType,
+      position: { x: 200, y: 200 },
+    };
+
+    setNodes((prevNodes) => [...prevNodes, newTargetNode]);
+
+    setEdges((prevEdges) => [
+      ...prevEdges,
+      {
+        id: `edge-${sourceNodeId}-${targetNodeId}`,
+        source: sourceNodeId,
+        target: newTargetNode.id,
+      },
+    ]);
+
+    setSourceNodeId(null);
+    setTargetNodeId(null);
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+    setSourceNodeId(null);
+    setTargetNodeId(null);
+  };
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
     [setNodes]
   );
+
   const onEdgesChange = useCallback(
     (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
     [setEdges]
   );
-  const onNodeClick = useCallback(
-    (node) => {
-      setClickedNode(node);
-    },
-    [setClickedNode]
-  );
 
-  console.log("Node clicked:", clickedNode);
+  const connectionCreated = useRef(false);
 
   const onConnect = useCallback(
-    (connection) =>
+    (connection) => {
+      connectionCreated.current = true;
+      setShowModal(false);
+
       setEdges((eds) =>
         addEdge(
           {
             ...connection,
             type: "buttonedge",
             markerEnd: { type: MarkerType.ArrowClosed },
-
             data: { setEdges },
           },
           eds
         )
-      ),
-    [setEdges]
+      );
+    },
+    [setEdges, setShowModal]
   );
-  // Hide reactflow attribution
+
+  const onConnectEnd = useCallback(() => {
+    // if no connection was created, show an alert (or in your case a modal)
+    if (!connectionCreated.current) {
+      //alert("Connection was dropped but no connection was created.");
+      setShowModal(true);
+    }
+
+    // reset the flag
+    connectionCreated.current = false;
+  }, [connectionCreated]);
+
   const proOptions = { hideAttribution: true };
 
   const { fitView } = useReactFlow();
@@ -191,10 +234,28 @@ function Flow() {
     [nodes, edges]
   );
 
-  // Calculate the initial layout on mount.
   useLayoutEffect(() => {
     onLayout({ direction: "RIGHT", useInitialNodes: true });
   }, []);
+  const modalStyles = {
+    content: {
+      width: "100px",
+      height: "120px",
+      margin: "auto",
+      display: "flex",
+      flexDirection: "column",
+      gap: 5,
+    },
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0)",
+    },
+  };
+  const optionStyles = {
+    border: "1px solid black",
+    textAlign: "center",
+    cursor: "pointer",
+    display: "block",
+  };
 
   return (
     <div style={{ width: "100%", height: "100vh" }}>
@@ -203,30 +264,55 @@ function Flow() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeClick={onNodeClick}
         onConnect={onConnect}
+        onConnectEnd={onConnectEnd}
         proOptions={proOptions}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        // onConnectStart={handleEdgeStart}
+        // onConnectEnd={handleEdgeEnd}
         fitView
         style={rfStyle}
       >
         <Controls />
         <Panel position="top-right">
-          <button onClick={() => onLayout({ direction: "DOWN" })}>
-            vertical layout
-          </button>
-
           <button onClick={() => onLayout({ direction: "RIGHT" })}>
-            horizontal layout
+            Horizontal Layout
           </button>
         </Panel>
       </ReactFlow>
+      <Modal
+        isOpen={showModal}
+        onRequestClose={handleModalCancel}
+        style={modalStyles}
+        shouldCloseOnOverlayClick={false}
+      >
+        <div
+          onClick={() => handleNodeTypeSelect("customNode4")}
+          style={optionStyles}
+        >
+          Action
+        </div>
+        <div
+          onClick={() => handleNodeTypeSelect("customNode1")}
+          style={optionStyles}
+        >
+          Message
+        </div>
+        <div
+          onClick={() => handleNodeTypeSelect("customNode3")}
+          style={optionStyles}
+        >
+          Condition
+        </div>
+        <div onClick={handleModalCancel} style={optionStyles}>
+          Cancel
+        </div>
+      </Modal>
     </div>
   );
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default () => (
   <ReactFlowProvider>
     <Flow />
