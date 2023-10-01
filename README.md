@@ -34,32 +34,23 @@ To run the application, execute the following command in the project directory:
 
 This will start the development server and open the application in your default web browser.
 
-Custom Components
-This project showcases the usage of custom nodes and edges. The following custom components are defined and used:
+## 4- Features:
 
-Custom, Custom2, Custom3, and Custom4: These are custom node components that define the appearance and behavior of different types of nodes.
+Custom Nodes: We created custom node components to with diverse styles and behaviors.
+Custom Edges: Establish connections between nodes.
+Marker Types: Explore various marker types, such as ArrowClosed, for visualizing edge endings.
+Node and Edge Management: The application allows users to seamlessly add, move, and delete nodes and edges.
+Zoom and Pan: Effortlessly zoom in and out of the canvas and pan to navigate different sections of the diagram.
 
-ButtonEdge: This is a custom edge component that represents a button-style edge connection between nodes.
-
-Features
-Custom Nodes: The project utilizes custom node components to create nodes with distinct styles and behaviors.
-
-Custom Edges: Custom edges are implemented to establish connections between nodes with unique visual characteristics.
-
-Marker Types: The example demonstrates the use of different marker types, like ArrowClosed, to visualize edge endings.
-
-Node and Edge Management: The application provides functionality to add, move, and delete nodes and edges.
-
-Zoom and Pan: Users can zoom in and out of the canvas and pan to view different areas of the diagram.
-
-The main component of the application is the Flow component, defined in the Flow.js file. It uses the ReactFlow library to render the flow diagram with custom nodes and edges.
+## 5- Flow Component:
+The heart of this application is the Flow component, defined in the Flow.js file. Leveraging the ReactFlow library, it renders the flow diagram with custom nodes and edges. Key elements include:
 
 nodeTypes: A dictionary of custom node components used in the flow diagram.
-
 edgeTypes: A dictionary of custom edge components used in the flow diagram.
-
 initialNodes: An array containing the initial set of nodes for the flow diagram.
-
 initialEdges: An array containing the initial set of edges for the flow diagram.
+The Flow component efficiently manages node and edge changes via the useState hook, offering functions like onNodesChange and onEdgesChange to update the application's state when modifications occur.
 
-The Flow component handles node and edge changes using the useState hook. It also provides functions like onNodesChange and onEdgesChange to update the state when changes occur.
+
+
+
