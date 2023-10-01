@@ -43,6 +43,7 @@ Node and Edge Management: The application allows users to seamlessly add, move, 
 Zoom and Pan: Effortlessly zoom in and out of the canvas and pan to navigate different sections of the diagram.
 
 ## 5- Flow Component:
+
 The heart of this application is the Flow component, defined in the Flow.js file. Leveraging the ReactFlow library, it renders the flow diagram with custom nodes and edges. Key elements include:
 
 nodeTypes: A dictionary of custom node components used in the flow diagram.
