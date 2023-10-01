@@ -1,4 +1,4 @@
-# ReactFlow Automation Flow with Custom Node and Edge
+# Automation Flow with Custom Node and Edge using ReactFlow 
 
 This is an example project that demonstrates how to create an Automation flow diagram using ReactFlow library with custom nodes and edges, redux was used for managing the states of our nodes.
 
