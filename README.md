@@ -9,8 +9,8 @@ This repository contains an example project that demonstrates how to create an a
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contact](#contact)
 - [Screenshots](#screenshots)
+- [Contact](#contact)
 
 ## Introduction
 
